@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Cenas/Prefabs/Personagens/Megaman.tscn" type="PackedScene" id=1]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 657.5, 30 )
+
+[node name="Cena_Teste" type="Node2D"]
+
+[node name="Megaman" parent="." instance=ExtResource( 1 )]
+position = Vector2( 330, 640 )
+
+[node name="Chao" type="StaticBody2D" parent="."]
+position = Vector2( 380, 646 )
+
+[node name="Shape" type="CollisionShape2D" parent="Chao"]
+position = Vector2( 271.5, 43 )
+shape = SubResource( 1 )
