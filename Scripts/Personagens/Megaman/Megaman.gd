@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 # Variáveis de estado.
 enum{
-	SHOOT, MOVE, JUMP
+	SHOOT, MOVE, JUMP, IDLE
 }
 var state = MOVE
 
@@ -38,6 +38,10 @@ func _physics_process(delta):
 	
 	match state:
 		
+		IDLE:
+			
+			velocity.x = 0
+		
 		MOVE:
 			
 			move(delta)
@@ -60,6 +64,7 @@ func _input(event: InputEvent):
 	
 	if event.is_action_pressed("Direita") || event.is_action_pressed("Esquerda"):
 		state = MOVE
+	
 	
 	if Input.is_action_just_pressed("Pulo") and verify_ground():
 		state = JUMP
@@ -96,7 +101,10 @@ func shoot():
 	
 		# Instanciar bullets na cena.
 		var bullet_instance = bullet.instance()
-		owner.add_child(bullet_instance)
+		
+		# Adicionar bullet caso ela não existir na cena.
+		if !mira.has_node(bullet_instance.name):
+			mira.add_child(bullet_instance)
 		
 		bullet_instance.global_position = mira.global_position
 		bullet_instance.direcao = 1 if sprite.flip_h == false else -1

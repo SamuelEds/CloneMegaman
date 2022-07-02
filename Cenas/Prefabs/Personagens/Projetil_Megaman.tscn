@@ -269,4 +269,9 @@ anims/Bullet_6 = SubResource( 7 )
 position = Vector2( 0, 1.43051e-07 )
 scale = Vector2( 0.4, 0.4 )
 
+[node name="Delay_Recarga_Bullet" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+
 [connection signal="screen_exited" from="VisibilityNotifier2D" to="." method="_on_VisibilityNotifier2D_screen_exited"]
+[connection signal="timeout" from="Delay_Recarga_Bullet" to="." method="_on_Delay_Recarga_Bullet_timeout"]
