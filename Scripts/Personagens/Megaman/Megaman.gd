@@ -28,6 +28,13 @@ export (PackedScene) var bullet = preload("res://Cenas/Prefabs/Personagens/Proje
 var pode_atirar = true
 var atirando = false
 
+# Verificação de timers.
+export (float) var timer_bullet_delay = 0.02
+
+# Verificar tempo que o player permaneceu apertando o botão.
+var button_time = 0.1
+var time = 0
+
 func _ready():
 	
 	set_physics_process(true)
@@ -45,11 +52,6 @@ func _physics_process(delta):
 		MOVE:
 			
 			move(delta)
-			
-		
-		SHOOT:
-			
-			shoot()
 		
 		JUMP:
 			
@@ -69,11 +71,18 @@ func _input(event: InputEvent):
 	if Input.is_action_just_pressed("Pulo") and verify_ground():
 		state = JUMP
 	
-	if Input.is_action_pressed("Atirar"):
-		shoot()
+	if Input.is_action_just_pressed("Atirar"):
+		atirando = true
+		$Button_Delay.start(button_time)
 	
-	else:
+	if Input.is_action_just_released("Atirar"):
+		
+		shoot(true)
 		atirando = false
+		$Button_Delay.stop()
+		
+		# Reset time
+		time = 0
 	
 
 func move(delta: float):
@@ -95,7 +104,7 @@ func flip():
 		$Miras.scale.x = -1
 
 # Atirar.
-func shoot():
+func shoot(bullet_is_charge: bool):
 	
 	if pode_atirar:
 	
@@ -103,15 +112,21 @@ func shoot():
 		var bullet_instance = bullet.instance()
 		
 		# Adicionar bullet caso ela não existir na cena.
-		if !mira.has_node(bullet_instance.name):
-			mira.add_child(bullet_instance)
+		if !owner.has_node(bullet_instance.name) and !bullet_is_charge:
+			owner.add_child(bullet_instance)
 		
+		else:
+			
+			if !owner.has_node(bullet_instance.name) and Input.is_action_just_released("Atirar"):
+				owner.add_child(bullet_instance)
+				print("Carga")
+			
 		bullet_instance.global_position = mira.global_position
 		bullet_instance.direcao = 1 if sprite.flip_h == false else -1
+		bullet_instance.normal_bullet = !bullet_is_charge
 		
 		pode_atirar = false
-		atirando = true
-		timer_bullet.start()
+		timer_bullet.start(timer_bullet_delay)
 
 func jump():
 	
@@ -142,7 +157,6 @@ func set_animation():
 		
 		# Está atirando correndo.
 		if atirando:
-			
 			anim = "Run_Shoot"
 	
 	else:
@@ -163,3 +177,13 @@ func set_animation():
 
 func _on_Bullet_Delay_timeout():
 	pode_atirar = true
+
+func _on_Button_Delay_timeout():
+	time += 1
+	
+	# Preessionou por tempo suficiente para disparar uma bullet normal.
+	if time < 14:
+		shoot(false)
+	
+	
+	

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Megaman_Normal_BULLETS.png-86d3aa1d5638df11387d81e92a06dc9b.stex"
+path="res://.import/Megaman_Normal_DEATH_EFFECT.png-107e267a8db8a96774e79001994bb0ca.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sprites/Megaman/SpritesMegaman/Megaman_NORMAL/Megaman_Normal_BULLETS.png"
-dest_files=[ "res://.import/Megaman_Normal_BULLETS.png-86d3aa1d5638df11387d81e92a06dc9b.stex" ]
+source_file="res://Sprites/Megaman/SpritesMegaman/Megaman_NORMAL/Megaman_Normal_DEATH_EFFECT.png"
+dest_files=[ "res://.import/Megaman_Normal_DEATH_EFFECT.png-107e267a8db8a96774e79001994bb0ca.stex" ]
 
 [params]
 
