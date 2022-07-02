@@ -1,2 +1,2 @@
 
-** Consertar pulo do megaman
+** Consertar as bullets
