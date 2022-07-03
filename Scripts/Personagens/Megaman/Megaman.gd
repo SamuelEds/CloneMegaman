@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 # Variáveis de estado.
 enum{
-	SHOOT, MOVE, JUMP, IDLE
+	SHOOT, MOVE, JUMP, IDLE, DASH
 }
 var state = MOVE
 
@@ -33,7 +33,16 @@ export (float) var timer_bullet_delay = 0.02
 
 # Verificar tempo que o player permaneceu apertando o botão.
 var button_time = 0.1
-var time = 0
+var time_bullet_charge = 0
+
+# Propriedades.
+onready var cor_original = $Sprite.modulate
+
+# Variáveis para o Dash
+const DASH_SPEED = 15000
+var direcao_dash = 1
+var dashing = false
+onready var timer_dash_delay = $Dash_Delay
 
 func _ready():
 	
@@ -56,7 +65,10 @@ func _physics_process(delta):
 		JUMP:
 			
 			jump()
+		
+		DASH:
 			
+			dash(delta)
 	
 	velocity = move_and_slide(velocity, Vector2.UP)
 	
@@ -64,26 +76,36 @@ func _physics_process(delta):
 
 func _input(event: InputEvent):
 	
-	if event.is_action_pressed("Direita") || event.is_action_pressed("Esquerda"):
+	if (event.is_action_pressed("Direita") || event.is_action_pressed("Esquerda")) and !dashing:
 		state = MOVE
 	
 	
 	if Input.is_action_just_pressed("Pulo") and verify_ground():
 		state = JUMP
 	
+	# Quando pressiona o botão de atirar (Verifica quanto tempo o jogador deixou a tecla pressionada)
 	if Input.is_action_just_pressed("Atirar"):
 		atirando = true
 		$Button_Delay.start(button_time)
 	
+	# QUando o jogador solta a tecla.
 	if Input.is_action_just_released("Atirar"):
 		
-		shoot(true)
+		# Atirar Bullet de carga quando o timer for maior que o da bullet normal.
+		if time_bullet_charge >= 14:
+			shoot(true)
+		
+		# Resetar animação e button delay.
 		atirando = false
 		$Button_Delay.stop()
 		
 		# Reset time
-		time = 0
+		time_bullet_charge = 0
 	
+	# Quando o Player apertar botão de Dash.
+	if Input.is_action_just_pressed("Dash"):
+		timer_dash_delay.start()
+		state = DASH
 
 func move(delta: float):
 	
@@ -92,6 +114,17 @@ func move(delta: float):
 	velocity.x = velocidade * direcao * delta
 	
 	flip()
+
+func dash(delta):
+	
+	if !sprite.flip_h:
+		direcao_dash = 1
+	
+	else:
+		direcao_dash = -1
+	
+	velocity.x = DASH_SPEED * direcao_dash * delta
+	dashing = true
 
 func flip():
 	
@@ -112,18 +145,18 @@ func shoot(bullet_is_charge: bool):
 		var bullet_instance = bullet.instance()
 		
 		# Adicionar bullet caso ela não existir na cena.
-		if !owner.has_node(bullet_instance.name) and !bullet_is_charge:
+		if !bullet_is_charge:
 			owner.add_child(bullet_instance)
 		
 		else:
-			
-			if !owner.has_node(bullet_instance.name) and Input.is_action_just_released("Atirar"):
+			if Input.is_action_just_released("Atirar"):
 				owner.add_child(bullet_instance)
-				print("Carga")
-			
+		
+		# Definindo propriedades.
 		bullet_instance.global_position = mira.global_position
 		bullet_instance.direcao = 1 if sprite.flip_h == false else -1
 		bullet_instance.normal_bullet = !bullet_is_charge
+		bullet_instance.time_bullet_charge = time_bullet_charge
 		
 		pode_atirar = false
 		timer_bullet.start(timer_bullet_delay)
@@ -165,25 +198,57 @@ func set_animation():
 		if atirando:
 			anim = "Idle_Shoot"
 	
+	# Quando o Player pular
 	if velocity.y < 0 and !verify_ground():
-		anim = "Jump"
+		
+		# Pular atirando
+		if atirando:
+			anim = "Jump_Shoot"
+		
+		else: 
+			anim = "Jump"
 	
 	elif velocity.y > 0 and !verify_ground():
-		anim = "Fall"
+		
+		if atirando:
+			anim = "Fallen_Shoot"
+		
+		else:
+			anim = "Fall"
+	
+	if dashing:
+		
+		if atirando:
+			anim = "Dash_Shoot"
+			
+		else:
+			anim = "Dash"
 	
 	if animator.assigned_animation != anim:
 		animator.play(anim)
-		
-
+	
 func _on_Bullet_Delay_timeout():
 	pode_atirar = true
 
 func _on_Button_Delay_timeout():
-	time += 1
+	time_bullet_charge += 1
 	
 	# Preessionou por tempo suficiente para disparar uma bullet normal.
-	if time < 14:
+	if time_bullet_charge < 14:
 		shoot(false)
 	
+	# Só vai piscar quando estiver com a carga disponível.
+	else:
+		sprite.modulate = Color("03fff9")
+		yield(get_tree().create_timer(0.2), "timeout")
+		sprite.modulate = Color("00c9ff")
+		yield(get_tree().create_timer(0.2), "timeout")
+		sprite.modulate = Color("98def1")
+		yield(get_tree().create_timer(0.2), "timeout")
+		sprite.modulate = cor_original
 	
-	
+
+func _on_Dash_Delay_timeout():
+	dashing = false
+	print("Parar Dash")
+	state = MOVE

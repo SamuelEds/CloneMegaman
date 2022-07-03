@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://Sprites/Megaman/SpritesMegaman/Megaman_NORMAL/Megaman_Normal_IDLE.png" type="Texture" id=1]
 [ext_resource path="res://Sprites/Megaman/SpritesMegaman/Megaman_NORMAL/Megaman_Normal_RUN.png" type="Texture" id=2]
@@ -6,6 +6,77 @@
 [ext_resource path="res://Sprites/Megaman/SpritesMegaman/Megaman_NORMAL/Megaman_Normal_JUMP.png" type="Texture" id=4]
 [ext_resource path="res://Sprites/Megaman/SpritesMegaman/Megaman_NORMAL/Megaman_Normal_IDLE_SHOOT.png" type="Texture" id=5]
 [ext_resource path="res://Sprites/Megaman/SpritesMegaman/Megaman_NORMAL/Megaman_Normal_RUN_SHOOT.png" type="Texture" id=6]
+[ext_resource path="res://Sprites/Megaman/SpritesMegaman/Megaman_NORMAL/Megaman_Normal_JUMP_SHOOT.png" type="Texture" id=7]
+[ext_resource path="res://Sprites/Megaman/SpritesMegaman/Megaman_NORMAL/Megaman_Normal_DASH.png" type="Texture" id=8]
+[ext_resource path="res://Sprites/Megaman/SpritesMegaman/Megaman_NORMAL/Megaman_Normal_DASH_SHOOT.png" type="Texture" id=9]
+
+[sub_resource type="Animation" id=12]
+resource_name = "Dash"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 8 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ Rect2( 1, 0, 28, 31 ), Rect2( 31, 6, 38, 25 ) ]
+}
+
+[sub_resource type="Animation" id=13]
+resource_name = "Dash_Shoot"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 9 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ Rect2( 0, 0, 37, 31 ), Rect2( 39, 6, 48, 25 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Miras/Alvo:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 19, -3 ), Vector2( 25, -1 ) ]
+}
 
 [sub_resource type="Animation" id=7]
 resource_name = "Fall"
@@ -33,6 +104,46 @@ tracks/1/keys = {
 "transitions": PoolRealArray( 1, 1 ),
 "update": 1,
 "values": [ Rect2( 76, 3, 23, 42 ), Rect2( 104, 3, 27, 42 ) ]
+}
+
+[sub_resource type="Animation" id=11]
+resource_name = "Fallen_Shoot"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 7 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 70, 0, 27, 46 ), Rect2( 103, 4, 31, 41 ), Rect2( 140, 4, 31, 43 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Miras/Alvo:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 15, -8 ), Vector2( 17, -8 ), Vector2( 17, -9 ) ]
 }
 
 [sub_resource type="Animation" id=1]
@@ -145,6 +256,46 @@ tracks/1/keys = {
 "values": [ Rect2( 2, 1, 24, 37 ), Rect2( 33, 1, 15, 41 ), Rect2( 52, -1, 19, 46 ) ]
 }
 
+[sub_resource type="Animation" id=10]
+resource_name = "Jump_Shoot"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 7 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 0, 2, 29, 37 ), Rect2( 40, 2, 23, 41 ), Rect2( 70, 0, 27, 46 ), Rect2( 103, 3, 31, 43 ), Rect2( 140, 4, 31, 42 ), Rect2( 177, 5, 30, 38 ), Rect2( 212, 7, 36, 32 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Miras/Alvo:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3, 0.5, 0.6 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 16, -5 ), Vector2( 13, -8 ), Vector2( 15, -7 ), Vector2( 16, -8 ), Vector2( 16, -7 ), Vector2( 19, -3 ) ]
+}
+
 [sub_resource type="Animation" id=2]
 length = 0.001
 tracks/0/type = "value"
@@ -170,6 +321,18 @@ tracks/1/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ Rect2( 36, 15, 30, 34 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("Miras/Alvo:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 13, -8 ) ]
 }
 
 [sub_resource type="Animation" id=3]
@@ -262,16 +425,20 @@ script = ExtResource( 3 )
 timer_bullet_delay = 0.01
 
 [node name="Sprite" type="Sprite" parent="."]
-texture = ExtResource( 5 )
+texture = ExtResource( 9 )
 region_enabled = true
 region_rect = Rect2( 36, 15, 30, 34 )
 
 [node name="Anim" type="AnimationPlayer" parent="."]
 autoplay = "Idle"
+anims/Dash = SubResource( 12 )
+anims/Dash_Shoot = SubResource( 13 )
 anims/Fall = SubResource( 7 )
+anims/Fallen_Shoot = SubResource( 11 )
 anims/Idle = SubResource( 1 )
 anims/Idle_Shoot = SubResource( 8 )
 anims/Jump = SubResource( 6 )
+anims/Jump_Shoot = SubResource( 10 )
 anims/RESET = SubResource( 2 )
 anims/Run = SubResource( 3 )
 anims/Run_Shoot = SubResource( 9 )
@@ -302,7 +469,7 @@ collision_mask = 2
 [node name="Miras" type="Node2D" parent="."]
 
 [node name="Alvo" type="Position2D" parent="Miras"]
-position = Vector2( 16, -1 )
+position = Vector2( 13, -8 )
 
 [node name="Bullet_Delay" type="Timer" parent="."]
 wait_time = 0.03
@@ -310,5 +477,10 @@ one_shot = true
 
 [node name="Button_Delay" type="Timer" parent="."]
 
+[node name="Dash_Delay" type="Timer" parent="."]
+wait_time = 0.7
+one_shot = true
+
 [connection signal="timeout" from="Bullet_Delay" to="." method="_on_Bullet_Delay_timeout"]
 [connection signal="timeout" from="Button_Delay" to="." method="_on_Button_Delay_timeout"]
+[connection signal="timeout" from="Dash_Delay" to="." method="_on_Dash_Delay_timeout"]
