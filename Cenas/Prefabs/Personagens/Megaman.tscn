@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://Sprites/Megaman/SpritesMegaman/Megaman_NORMAL/Megaman_Normal_IDLE.png" type="Texture" id=1]
 [ext_resource path="res://Sprites/Megaman/SpritesMegaman/Megaman_NORMAL/Megaman_Normal_RUN.png" type="Texture" id=2]
@@ -9,6 +9,8 @@
 [ext_resource path="res://Sprites/Megaman/SpritesMegaman/Megaman_NORMAL/Megaman_Normal_JUMP_SHOOT.png" type="Texture" id=7]
 [ext_resource path="res://Sprites/Megaman/SpritesMegaman/Megaman_NORMAL/Megaman_Normal_DASH.png" type="Texture" id=8]
 [ext_resource path="res://Sprites/Megaman/SpritesMegaman/Megaman_NORMAL/Megaman_Normal_DASH_SHOOT.png" type="Texture" id=9]
+[ext_resource path="res://Sprites/Megaman/SpritesMegaman/Megaman_NORMAL/Megaman_Normal_GRAB_WALL.png" type="Texture" id=10]
+[ext_resource path="res://Sprites/Megaman/SpritesMegaman/Megaman_NORMAL/Megaman_Normal_GRAB_WALL_SHOOT.png" type="Texture" id=11]
 
 [sub_resource type="Animation" id=12]
 resource_name = "Dash"
@@ -146,9 +148,65 @@ tracks/2/keys = {
 "values": [ Vector2( 15, -8 ), Vector2( 17, -8 ), Vector2( 17, -9 ) ]
 }
 
+[sub_resource type="Animation" id=16]
+resource_name = "Grab_Wall_Shoot"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 11 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 1, 4, 31, 38 ), Rect2( 44, 0, 32, 42 ), Rect2( 83, 0, 32, 42 ) ]
+}
+
+[sub_resource type="Animation" id=17]
+resource_name = "Grab_Wall_Shoot_Fallen"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 11 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Rect2( 83, 0, 33, 42 ) ]
+}
+
 [sub_resource type="Animation" id=1]
 resource_name = "Idle"
-length = 1.6
+length = 1.1
 loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:texture")
@@ -169,10 +227,10 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0, 0.7, 1, 1.5 ),
-"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"times": PoolRealArray( 0, 0.7, 1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
 "update": 1,
-"values": [ Rect2( 1, 15, 30, 34 ), Rect2( 36, 15, 30, 34 ), Rect2( 70, 15, 30, 34 ), Rect2( 105, 15, 30, 34 ) ]
+"values": [ Rect2( 1, 15, 30, 34 ), Rect2( 36, 15, 30, 34 ), Rect2( 70, 15, 30, 34 ) ]
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath("Shape:position")
@@ -415,9 +473,64 @@ tracks/2/keys = {
 "values": [ Vector2( 16, -3 ) ]
 }
 
+[sub_resource type="Animation" id=15]
+resource_name = "Wall_Fallen"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 10 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Rect2( 59, 0, 28, 42 ) ]
+}
+
+[sub_resource type="Animation" id=14]
+resource_name = "Wall_Jump"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ ExtResource( 10 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Sprite:region_rect")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ Rect2( 0, 0, 25, 43 ), Rect2( 28, 0, 27, 43 ), Rect2( 59, 0, 28, 42 ) ]
+}
+
 [sub_resource type="CapsuleShape2D" id=5]
-radius = 14.0
-height = 4.0
+height = 12.0
 
 [node name="Megaman" type="KinematicBody2D"]
 collision_mask = 2
@@ -425,7 +538,7 @@ script = ExtResource( 3 )
 timer_bullet_delay = 0.01
 
 [node name="Sprite" type="Sprite" parent="."]
-texture = ExtResource( 9 )
+texture = ExtResource( 1 )
 region_enabled = true
 region_rect = Rect2( 36, 15, 30, 34 )
 
@@ -435,6 +548,8 @@ anims/Dash = SubResource( 12 )
 anims/Dash_Shoot = SubResource( 13 )
 anims/Fall = SubResource( 7 )
 anims/Fallen_Shoot = SubResource( 11 )
+anims/Grab_Wall_Shoot = SubResource( 16 )
+anims/Grab_Wall_Shoot_Fallen = SubResource( 17 )
 anims/Idle = SubResource( 1 )
 anims/Idle_Shoot = SubResource( 8 )
 anims/Jump = SubResource( 6 )
@@ -442,6 +557,8 @@ anims/Jump_Shoot = SubResource( 10 )
 anims/RESET = SubResource( 2 )
 anims/Run = SubResource( 3 )
 anims/Run_Shoot = SubResource( 9 )
+anims/Wall_Fallen = SubResource( 15 )
+anims/Wall_Jump = SubResource( 14 )
 
 [node name="Shape" type="CollisionShape2D" parent="."]
 shape = SubResource( 5 )
@@ -455,16 +572,28 @@ editor_draw_drag_margin = true
 [node name="Raycasts" type="Node2D" parent="."]
 
 [node name="Direita" type="RayCast2D" parent="Raycasts"]
-position = Vector2( 8, 6 )
+position = Vector2( 6, 6 )
 enabled = true
 cast_to = Vector2( 0, 12 )
-collision_mask = 2
+collision_mask = 6
 
 [node name="Esquerda" type="RayCast2D" parent="Raycasts"]
-position = Vector2( -8, 6 )
+position = Vector2( -6, 6 )
 enabled = true
 cast_to = Vector2( 0, 12 )
-collision_mask = 2
+collision_mask = 6
+
+[node name="Raycasts_Grab" type="Node2D" parent="."]
+
+[node name="Grab_Dir" type="RayCast2D" parent="Raycasts_Grab"]
+enabled = true
+cast_to = Vector2( 14, 0 )
+collision_mask = 4
+
+[node name="Grab_Esq" type="RayCast2D" parent="Raycasts_Grab"]
+enabled = true
+cast_to = Vector2( -12, 0 )
+collision_mask = 4
 
 [node name="Miras" type="Node2D" parent="."]
 

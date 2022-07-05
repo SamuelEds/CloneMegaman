@@ -30,6 +30,7 @@ texture = ExtResource( 2 )
 
 [node name="Parede_Esq" type="StaticBody2D" parent="."]
 position = Vector2( 103, 458 )
+collision_layer = 4
 
 [node name="Sprite" type="Sprite" parent="Parede_Esq"]
 position = Vector2( -11.5, 19 )
@@ -42,6 +43,7 @@ shape = SubResource( 2 )
 
 [node name="Parede_Dir" type="StaticBody2D" parent="."]
 position = Vector2( 571, 459 )
+collision_layer = 4
 
 [node name="Sprite" type="Sprite" parent="Parede_Dir"]
 position = Vector2( -11.5, 19 )

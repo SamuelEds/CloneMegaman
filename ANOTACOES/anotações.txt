@@ -1,2 +1,7 @@
 
-** Consertar as bullets
+** Notas - 02/07/2022
+
+-> Criar mecânica de Grab Wall.
+-->) Animações de Grab Wall adicionadas, falta consertar mira que fica do lado errado e gravidade quando estiver na parede.
+
+-->) Mecânicas de Grab Wall consertadas, falta apenas aplicar o Wall Slide.

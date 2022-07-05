@@ -13,6 +13,7 @@ var direcao = 1
 export (int) var friccao = 600
 
 export (int) var gravidade = 1200
+onready var gravidade_original = gravidade
 export (int) var forca_pulo = -900
 
 # Obter nós e Prefabs
@@ -43,6 +44,13 @@ const DASH_SPEED = 15000
 var direcao_dash = 1
 var dashing = false
 onready var timer_dash_delay = $Dash_Delay
+var can_dash = true
+
+# Variáveis para Grab Wall
+var grab_wall = false
+onready var raycasts_grabs = $Raycasts_Grab
+export (int) var grab_gravity = 1100
+export (int) var forca_pulo_grab_wall = -500
 
 func _ready():
 	
@@ -76,11 +84,10 @@ func _physics_process(delta):
 
 func _input(event: InputEvent):
 	
-	if (event.is_action_pressed("Direita") || event.is_action_pressed("Esquerda")) and !dashing:
+	if (event.is_action_pressed("Direita") || event.is_action_pressed("Esquerda")):
 		state = MOVE
 	
-	
-	if Input.is_action_just_pressed("Pulo") and verify_ground():
+	if Input.is_action_just_pressed("Pulo") and (verify_ground() or verify_wall()):
 		state = JUMP
 	
 	# Quando pressiona o botão de atirar (Verifica quanto tempo o jogador deixou a tecla pressionada)
@@ -102,8 +109,8 @@ func _input(event: InputEvent):
 		# Reset time
 		time_bullet_charge = 0
 	
-	# Quando o Player apertar botão de Dash.
-	if Input.is_action_just_pressed("Dash"):
+	# Quando o Player apertar botão de Dash. Só pode dá dash quando estiver no chão ou pregado na parede.
+	if Input.is_action_just_pressed("Dash") and (verify_ground() or verify_wall()):
 		timer_dash_delay.start()
 		state = DASH
 
@@ -117,13 +124,31 @@ func move(delta: float):
 
 func dash(delta):
 	
-	if !sprite.flip_h:
-		direcao_dash = 1
+	if verify_wall():
+		if !sprite.flip_h:
+			direcao_dash = -1
 	
-	else:
-		direcao_dash = -1
+		else:
+			direcao_dash = 1
+		
+		# Flipar Sprite quando estiver grudado na parede e não estiver no chão.
+		if !verify_ground():
+			sprite.flip_h = !sprite.flip_h
 	
+	if verify_ground():
+		if !sprite.flip_h:
+			direcao_dash = 1
+		
+		else:
+			direcao_dash = -1
+	
+	# Aplicar mais velocidade para o Dash.
 	velocity.x = DASH_SPEED * direcao_dash * delta
+	
+	# Aplicar uma força horizontal.
+	if !verify_ground():
+		velocity.y = forca_pulo_grab_wall / 2
+	
 	dashing = true
 
 func flip():
@@ -131,10 +156,13 @@ func flip():
 	if direcao > 0:
 		sprite.flip_h = false
 		$Miras.scale.x = 1
-	
+		
 	elif direcao < 0:
 		sprite.flip_h = true
 		$Miras.scale.x = -1
+	
+	if verify_wall():
+		$Miras.scale.x = -$Miras.scale.x
 
 # Atirar.
 func shoot(bullet_is_charge: bool):
@@ -154,7 +182,14 @@ func shoot(bullet_is_charge: bool):
 		
 		# Definindo propriedades.
 		bullet_instance.global_position = mira.global_position
-		bullet_instance.direcao = 1 if sprite.flip_h == false else -1
+		
+		# Definir a direção dependendo se o megaman estiver grudado na parede e não estiver no chão.
+		if verify_wall() and !verify_ground():
+			bullet_instance.direcao = -1 if sprite.flip_h == false else 1
+		
+		else:
+			bullet_instance.direcao = 1 if sprite.flip_h == false else -1
+		
 		bullet_instance.normal_bullet = !bullet_is_charge
 		bullet_instance.time_bullet_charge = time_bullet_charge
 		
@@ -175,8 +210,24 @@ func verify_ground():
 			return true
 		
 	return false
+
+func verify_wall():
 	
+	for grabs in raycasts_grabs.get_children():
+		
+		if grabs.is_colliding():
+			
+			return true
+	
+	return false
+
 func apply_gravity(delta: float):
+	
+	if verify_wall():
+		gravidade = grab_gravity
+	
+	else:
+		gravidade = gravidade_original
 	
 	velocity.y += gravidade * delta
 
@@ -203,20 +254,38 @@ func set_animation():
 		
 		# Pular atirando
 		if atirando:
-			anim = "Jump_Shoot"
+			
+			if verify_wall():
+				anim = "Grab_Wall_Shoot"
+			
+			else:
+				anim = "Jump_Shoot"
 		
-		else: 
+		elif verify_wall():
+			anim = "Wall_Jump"
+		
+		else:
 			anim = "Jump"
+			
 	
+	# Quando o Player cair.
 	elif velocity.y > 0 and !verify_ground():
 		
 		if atirando:
-			anim = "Fallen_Shoot"
+			
+			if verify_wall():
+				anim = "Grab_Wall_Shoot_Fallen"
+			
+			else:
+				anim = "Fallen_Shoot"
 		
+		elif verify_wall():
+			anim = "Wall_Fallen"
+			
 		else:
 			anim = "Fall"
 	
-	if dashing:
+	if dashing and verify_ground():
 		
 		if atirando:
 			anim = "Dash_Shoot"
@@ -250,5 +319,4 @@ func _on_Button_Delay_timeout():
 
 func _on_Dash_Delay_timeout():
 	dashing = false
-	print("Parar Dash")
 	state = MOVE
