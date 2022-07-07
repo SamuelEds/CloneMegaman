@@ -49,7 +49,8 @@ var can_dash = true
 # Variáveis para Grab Wall
 var grab_wall = false
 onready var raycasts_grabs = $Raycasts_Grab
-export (int) var grab_gravity = 1100
+onready var reload_dash_delay = $Reload_Dash_Delay
+export (int) var grab_gravity = 100
 export (int) var forca_pulo_grab_wall = -500
 
 func _ready():
@@ -124,32 +125,39 @@ func move(delta: float):
 
 func dash(delta):
 	
-	if verify_wall():
-		if !sprite.flip_h:
-			direcao_dash = -1
+	# Verificar esta parte que está dando erro.
 	
-		else:
-			direcao_dash = 1
+	if can_dash:
 		
-		# Flipar Sprite quando estiver grudado na parede e não estiver no chão.
-		if !verify_ground():
-			sprite.flip_h = !sprite.flip_h
-	
-	if verify_ground():
-		if !sprite.flip_h:
-			direcao_dash = 1
+		if verify_wall() and !verify_ground():
+			
+			if !sprite.flip_h:
+				direcao_dash = -1
+				sprite.flip_h = true
 		
-		else:
-			direcao_dash = -1
-	
-	# Aplicar mais velocidade para o Dash.
-	velocity.x = DASH_SPEED * direcao_dash * delta
-	
+			else:
+				direcao_dash = 1
+				sprite.flip_h = false
+				
+			# Flipar Sprite quando estiver grudado na parede e não estiver no chão.
+		
+		elif verify_ground():
+			if !sprite.flip_h:
+				direcao_dash = 1
+			
+			else:
+				direcao_dash = -1
+		
+		# Aplicar mais velocidade para o Dash.
+		velocity.x = DASH_SPEED * direcao_dash * delta
+		
+		dashing = true
+		can_dash = false
+		reload_dash_delay.start()
+		
 	# Aplicar uma força horizontal.
 	if !verify_ground():
 		velocity.y = forca_pulo_grab_wall / 2
-	
-	dashing = true
 
 func flip():
 	
@@ -161,8 +169,9 @@ func flip():
 		sprite.flip_h = true
 		$Miras.scale.x = -1
 	
+	# Flipar a mira se estiver pregado na parede.
 	if verify_wall():
-		$Miras.scale.x = -$Miras.scale.x
+		$Miras.scale.x = -1 if sprite.flip_h == false else 1
 
 # Atirar.
 func shoot(bullet_is_charge: bool):
@@ -223,7 +232,7 @@ func verify_wall():
 
 func apply_gravity(delta: float):
 	
-	if verify_wall():
+	if verify_wall() and !verify_ground() and velocity.y > 0:
 		gravidade = grab_gravity
 	
 	else:
@@ -320,3 +329,6 @@ func _on_Button_Delay_timeout():
 func _on_Dash_Delay_timeout():
 	dashing = false
 	state = MOVE
+
+func _on_Reload_Delay_timeout():
+	can_dash = true

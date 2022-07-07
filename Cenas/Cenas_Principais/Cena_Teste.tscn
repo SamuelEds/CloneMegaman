@@ -7,7 +7,7 @@
 extents = Vector2( 657.5, 28.5 )
 
 [sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 23, 184.5 )
+extents = Vector2( 22.25, 184.5 )
 
 [node name="Cena_Teste" type="Node2D"]
 
@@ -38,7 +38,7 @@ scale = Vector2( 0.734375, 5.78125 )
 texture = ExtResource( 2 )
 
 [node name="Shape" type="CollisionShape2D" parent="Parede_Esq"]
-position = Vector2( -13, 18.5 )
+position = Vector2( -12.5, 18.5 )
 shape = SubResource( 2 )
 
 [node name="Parede_Dir" type="StaticBody2D" parent="."]
@@ -51,5 +51,5 @@ scale = Vector2( 0.734375, 5.78125 )
 texture = ExtResource( 2 )
 
 [node name="Shape" type="CollisionShape2D" parent="Parede_Dir"]
-position = Vector2( -13, 18.5 )
+position = Vector2( -11.75, 18.5 )
 shape = SubResource( 2 )

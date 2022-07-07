@@ -5,3 +5,7 @@
 -->) Animações de Grab Wall adicionadas, falta consertar mira que fica do lado errado e gravidade quando estiver na parede.
 
 -->) Mecânicas de Grab Wall consertadas, falta apenas aplicar o Wall Slide.
+
+-->) Wall Slide aplicado, só falta consertar Bug do tiro quando dá o dash na parede e conflito na parede da direita.
+
+-->) Bugs cosertados
